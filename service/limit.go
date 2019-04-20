@@ -11,7 +11,7 @@ func (j *judgeLeader) queryLimit(message *queue.Message) (int, int, error) {
 	conf := j.confs[message.Lid]
 	timeLimit, memLimit := conf.TimeLimit, conf.MemLimit
 	var str string
-	row := database.DB.QueryRow("SELECT special_limits FROM ENTITY__PROBLEM WHERE id = ?", message.Pid)
+	row := database.DB.QueryRow("SELECT special_limits FROM tb_problem WHERE id = ?", message.Pid)
 	if err := row.Scan(&str); err != nil {
 		return timeLimit, memLimit, err
 	}

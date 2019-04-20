@@ -12,7 +12,7 @@ type _case struct {
 }
 
 func (j *judgeLeader) queryCase(message *queue.Message) ([]*_case, error) {
-	rows, err := database.DB.Query("SELECT id, input, output FROM ENTITY__CASE WHERE pid = ?", message.Pid)
+	rows, err := database.DB.Query("SELECT id, input, output FROM tb_case WHERE pid = ?", message.Pid)
 	if err != nil {
 		return nil, err
 	}

@@ -71,7 +71,7 @@ func (j *judgeLeader) judge(message *queue.Message) {
 }
 
 func (j *judgeLeader) setStatus(message *queue.Message, status common.SubmissionStatus) {
-	_, err := database.DB.Exec("UPDATE ENTITY__SUBMISSION SET status = ? WHERE id = ?", status.String(), message.Sid)
+	_, err := database.DB.Exec("UPDATE tb_submission SET status = ? WHERE id = ?", status.String(), message.Sid)
 	if err != nil {
 		logs.Error("[JudgeLeader] sid = %d, set status error: %s", message.Sid, err.Error())
 	}
@@ -81,14 +81,14 @@ func (j *judgeLeader) finalize(message *queue.Message, status common.SubmissionS
 	if length := len(ce); length > 4000 {
 		ce = fmt.Sprintf("%s\n......\nCompile error message is too long with total %d bytes!", ce[:4000], length)
 	}
-	_, err := database.DB.Exec("UPDATE ENTITY__SUBMISSION SET status = ?, compile_error = ?, executions = ? WHERE id = ?", status.String(), ce, executions, message.Sid)
+	_, err := database.DB.Exec("UPDATE tb_submission SET status = ?, compile_error = ?, executions = ? WHERE id = ?", status.String(), ce, executions, message.Sid)
 	if err != nil {
 		logs.Error("[JudgeLeader] sid = %d, finalize error: %s", message.Sid, err.Error())
 	}
 	if status != common.SubmissionStatus_ACCEPTED {
 		return
 	}
-	_, err = database.DB.Exec("UPDATE ENTITY__PROBLEM SET accepted_count = accepted_count + 1 WHERE id = ?", message.Pid)
+	_, err = database.DB.Exec("UPDATE tb_problem SET accepted_count = accepted_count + 1 WHERE id = ?", message.Pid)
 	if err != nil {
 		logs.Error("[JudgeLeader] sid = %d, update accepted count error: %s", message.Sid, err.Error())
 	}

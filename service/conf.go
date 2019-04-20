@@ -20,7 +20,7 @@ type judgeConf struct {
 }
 
 func (j *judgeLeader) queryConf() {
-	rows, err := database.DB.Query("SELECT id, need_compile, compile_image, compile_cmd, compile_env, execute_image, execute_cmd, time_limit, mem_limit FROM ENTITY__LANGUAGE")
+	rows, err := database.DB.Query("SELECT id, need_compile, compile_image, compile_cmd, compile_env, execute_image, execute_cmd, time_limit, mem_limit FROM tb_language")
 	if err != nil {
 		logs.Error("[JudgerLeader] query conf error: %s", err.Error())
 		return
