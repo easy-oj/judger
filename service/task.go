@@ -60,7 +60,7 @@ func (t *task) judge() (common.SubmissionStatus, string, string) {
 	status := common.SubmissionStatus_ACCEPTED
 	es := make([]*execution, len(t.cases))
 	for idx, c := range t.cases {
-		time.Sleep(time.Second)
+		time.Sleep(100 * time.Millisecond)
 		e := newExecution(t, c)
 		e.execute()
 		if e.s != common.ExecutionStatus_EXECUTION_ACCEPTED {
